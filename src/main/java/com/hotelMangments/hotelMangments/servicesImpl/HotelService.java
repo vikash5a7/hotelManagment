@@ -13,16 +13,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class HotelService {
     private final HotelRepository hotelRepository;
     private final ObjectMapper mapper;
+    private final HistoryEntryService historyEntryService;
 
-    public HotelService(HotelRepository hotelRepository, ObjectMapper mapper) {
+
+    public HotelService(HotelRepository hotelRepository, ObjectMapper mapper, HistoryEntryService historyEntryService) {
         this.hotelRepository = hotelRepository;
         this.mapper = mapper;
+        this.historyEntryService = historyEntryService;
     }
 
     public List<Hotel> getAllHotels() {
@@ -35,7 +37,9 @@ public class HotelService {
 
     public Hotel createHotel(HotelRequestBody hotel) {
         Hotel saveHotelInfo = mapper.convertValue(hotel, Hotel.class);
-        return hotelRepository.save(saveHotelInfo);
+        Hotel saveHotel = hotelRepository.save(saveHotelInfo);
+        historyEntryService.saveHistory("New Hotel Added", "A new hotel added name: " + saveHotel.getName() + " ID: " + saveHotel.getId());
+        return saveHotel;
     }
 
     public Page<Hotel> searchHotels(String name, String location, Pageable pageable) {
@@ -47,7 +51,9 @@ public class HotelService {
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found with id: " + hotelId));
         saveRoom.setHotel(hotel);
         hotel.getRooms().add(saveRoom);
-        return hotelRepository.save(hotel);
+        Hotel saveHotel = hotelRepository.save(hotel);
+        historyEntryService.saveHistory("New Room Added", "A new room added to hotel name: " + saveHotel.getName() + " Room number: " + room.getRoomNumber());
+        return saveHotel;
     }
 
     public List<Room> getAllRooms(Long hotelId) {
@@ -65,11 +71,12 @@ public class HotelService {
         existingRoom.setCapacity(room.getCapacity());
         existingRoom.setPrice(room.getPrice());
         existingRoom.setAmenities(room.getAmenities());
-        // Update other room properties as needed
-        return null;
+        historyEntryService.saveHistory("Updated room details ", "Room details updated:  room id " + roomId);
+        return room;
     }
 
     public void deleteRoom(Long roomId) {
+        historyEntryService.saveHistory("Deleted room ", "Deleted room Id: " + roomId);
         hotelRepository.deleteById(roomId);
     }
 }

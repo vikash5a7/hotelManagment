@@ -2,9 +2,11 @@ package com.hotelMangments.hotelMangments.entity;
 
 import com.hotelMangments.hotelMangments.enums.ReservationStatus;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "reservations")
@@ -33,8 +35,18 @@ public class Reservation {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
 
 }
 

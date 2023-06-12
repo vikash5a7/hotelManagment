@@ -1,8 +1,10 @@
 package com.hotelMangments.hotelMangments.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +36,10 @@ public class Hotel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_details_id")
     private ContactDetails contactDetails;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<Room> rooms;

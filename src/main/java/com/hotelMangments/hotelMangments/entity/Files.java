@@ -1,9 +1,11 @@
 package com.hotelMangments.hotelMangments.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "files")
@@ -18,6 +20,10 @@ public class Files {
 
 	private String fileType;
 
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdAt;
 	@Lob
 	private byte[] data;
 

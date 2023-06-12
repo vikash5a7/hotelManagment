@@ -18,11 +18,13 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final HotelRepository hotelRepository;
     private final UserRepository userRepository;
+    private final HistoryEntryService historyEntryService;
 
-    public ReservationService(ReservationRepository reservationRepository, HotelRepository hotelRepository, UserRepository userRepository) {
+    public ReservationService(ReservationRepository reservationRepository, HotelRepository hotelRepository, UserRepository userRepository, HistoryEntryService historyEntryService) {
         this.reservationRepository = reservationRepository;
         this.hotelRepository = hotelRepository;
         this.userRepository = userRepository;
+        this.historyEntryService = historyEntryService;
     }
 
     public Reservation getReservationById(Long id) {
@@ -39,7 +41,9 @@ public class ReservationService {
         room.setOccupied(true);
         saveReservation.setUser(user);
         saveReservation.setRoom(room);
-        return reservationRepository.save(saveReservation);
+        Reservation reservation1 = reservationRepository.save(saveReservation);
+        historyEntryService.saveHistory("New Reservation","A room booked id: "+reservation1.getId());
+        return reservation1;
     }
 
     public Reservation updateReservation(Long id, Reservation reservation) {

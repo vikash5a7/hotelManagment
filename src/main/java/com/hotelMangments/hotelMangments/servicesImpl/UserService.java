@@ -27,13 +27,16 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final ObjectMapper mapper;
+    private final HistoryEntryService historyEntryService;
+
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ObjectMapper mapper, PasswordEncoder passwordEncoder1) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ObjectMapper mapper, HistoryEntryService historyEntryService, PasswordEncoder passwordEncoder1) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.historyEntryService = historyEntryService;
         this.passwordEncoder = passwordEncoder1;
     }
 
@@ -44,7 +47,8 @@ public class UserService implements UserDetailsService {
         Role roles = new Role();
         roles.setName("USER");
         saveUser.setRoles(Collections.singleton(roles));
-        userRepository.save(saveUser);
+        User save = userRepository.save(saveUser);
+        historyEntryService.saveHistory("New User Added ", "New User added, Name:  " + user.getFirstName() + " Id: " + save.getId());
     }
 
     @Override
@@ -70,10 +74,12 @@ public class UserService implements UserDetailsService {
         User user = getUserById(id);
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
+        historyEntryService.saveHistory("Updated user details", "user updated, Name:  " + user.getFirstName());
         return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
+        historyEntryService.saveHistory("Deleted User", "User deleted account:  " + id);
         userRepository.deleteById(id);
     }
 }

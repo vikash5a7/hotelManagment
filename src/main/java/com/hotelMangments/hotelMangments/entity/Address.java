@@ -2,8 +2,10 @@ package com.hotelMangments.hotelMangments.entity;
 
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -28,5 +30,9 @@ public class Address {
 
     @Column(nullable = false)
     private String zipCode;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 }
 
