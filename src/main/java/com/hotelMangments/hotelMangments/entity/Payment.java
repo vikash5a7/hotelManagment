@@ -1,6 +1,7 @@
 package com.hotelMangments.hotelMangments.entity;
 
 import com.hotelMangments.hotelMangments.enums.PaymentStatus;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "payments")
+@Data
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

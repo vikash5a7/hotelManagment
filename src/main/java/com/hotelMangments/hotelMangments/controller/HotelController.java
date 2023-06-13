@@ -48,9 +48,10 @@ public class HotelController {
     }
 
     @PostMapping("/{hotelId}/rooms")
-    public ResponseEntity<Hotel> addRoomToHotel(@PathVariable Long hotelId, @RequestBody RoomDetails room) {
-        Hotel updatedHotel = hotelService.addRoomToHotel(hotelId, room);
-        return ResponseEntity.ok(updatedHotel);
+    public ResponseEntity<Room> addRoomToHotel(@PathVariable Long hotelId, @RequestBody RoomDetails room) {
+        System.out.println("hiiiiiiiiiiiiii");
+        Room savedRooms= hotelService.addRoomToHotel(hotelId, room);
+        return ResponseEntity.ok(savedRooms);
     }
 
     @GetMapping("/{hotelId}/rooms")

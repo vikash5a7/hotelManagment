@@ -37,11 +37,12 @@ public class Hotel {
     @JoinColumn(name = "contact_details_id")
     private ContactDetails contactDetails;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<Room> rooms;
 
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 }

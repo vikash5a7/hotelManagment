@@ -1,7 +1,5 @@
 package com.hotelMangments.hotelMangments.request;
 
-import com.hotelMangments.hotelMangments.entity.Guest;
-import com.hotelMangments.hotelMangments.enums.ReservationStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,5 +11,5 @@ public class ReservationRequest {
     private Long userId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private ReservationStatus status;
+    private Payment payment;
 }

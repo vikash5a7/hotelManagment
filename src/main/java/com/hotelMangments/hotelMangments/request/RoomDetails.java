@@ -13,4 +13,6 @@ public class RoomDetails {
     private Integer capacity;
     private BigDecimal price;
     private Set<String> amenities;
+
+    private boolean isOccupied = false;
 }

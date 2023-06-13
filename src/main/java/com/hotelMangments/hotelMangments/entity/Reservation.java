@@ -20,10 +20,6 @@ public class Reservation {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @ManyToOne
-    @JoinColumn(name = "guest_id")
-    private Guest guest;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -42,11 +38,13 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
 
 }
 

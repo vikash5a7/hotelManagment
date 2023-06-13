@@ -6,6 +6,7 @@ import com.hotelMangments.hotelMangments.entity.Room;
 import com.hotelMangments.hotelMangments.exception.NotFoundException;
 import com.hotelMangments.hotelMangments.exception.ResourceNotFoundException;
 import com.hotelMangments.hotelMangments.repository.HotelRepository;
+import com.hotelMangments.hotelMangments.repository.RoomRepository;
 import com.hotelMangments.hotelMangments.request.HotelRequestBody;
 import com.hotelMangments.hotelMangments.request.RoomDetails;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,13 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final ObjectMapper mapper;
     private final HistoryEntryService historyEntryService;
+    private final RoomRepository roomRepository;
 
-
-    public HotelService(HotelRepository hotelRepository, ObjectMapper mapper, HistoryEntryService historyEntryService) {
+    public HotelService(HotelRepository hotelRepository, ObjectMapper mapper, HistoryEntryService historyEntryService, RoomRepository roomRepository) {
         this.hotelRepository = hotelRepository;
         this.mapper = mapper;
         this.historyEntryService = historyEntryService;
+        this.roomRepository = roomRepository;
     }
 
     public List<Hotel> getAllHotels() {
@@ -46,14 +48,13 @@ public class HotelService {
         return hotelRepository.findByNameContainingOrLocationContaining(name, location, pageable);
     }
 
-    public Hotel addRoomToHotel(Long hotelId, RoomDetails room) {
+    public Room addRoomToHotel(Long hotelId, RoomDetails room) {
         Room saveRoom = mapper.convertValue(room, Room.class);
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found with id: " + hotelId));
         saveRoom.setHotel(hotel);
-        hotel.getRooms().add(saveRoom);
-        Hotel saveHotel = hotelRepository.save(hotel);
-        historyEntryService.saveHistory("New Room Added", "A new room added to hotel name: " + saveHotel.getName() + " Room number: " + room.getRoomNumber());
-        return saveHotel;
+        Room saveRoomDetails = roomRepository.save(saveRoom);
+        historyEntryService.saveHistory("New Room Added", "A new room added to hotel name: " + hotel.getName() + " Room number: " + room.getRoomNumber());
+        return saveRoomDetails;
     }
 
     public List<Room> getAllRooms(Long hotelId) {

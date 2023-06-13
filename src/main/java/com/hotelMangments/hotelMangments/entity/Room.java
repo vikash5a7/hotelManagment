@@ -3,6 +3,8 @@ package com.hotelMangments.hotelMangments.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hotelMangments.hotelMangments.enums.RoomType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,7 +13,8 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Room {
 
     @Id
